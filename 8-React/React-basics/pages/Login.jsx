@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [User, setUser] = useState({
@@ -15,9 +16,32 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(User);
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/login",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(User)
+      })
+      console.log(response);
+      if(response.ok){
+        setUser({
+          email: "",
+          password: "",
+        })
+        const data = await response.json()
+        console.log(data);
+        navigate("/")
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
