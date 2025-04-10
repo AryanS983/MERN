@@ -37,7 +37,7 @@ const register = async (req, res)=>{
             res.status(200).json(
                 {
                     msg:"user data saved",
-                    token: await newUser.generateToken(),
+                    // token: await newUser.generateToken(),
                     userId: newUser._id.toString(),
                     userdata: newUser
                 }
@@ -61,11 +61,16 @@ const login = async (req, res)=>{
         }
         
         // const match = await  bcrypt.compare(password, userExist.password)
-        if(userExist.comp(password)){
+        if(await userExist.comp(password)){
+            const token= await userExist.generateToken()
+            res.cookie("token", token, {
+                httponly: true,
+                sameSite: "Strict",
+            })
             res.status(200).json(
                 {
                     msg:"balle balle...",
-                    token: await userExist.generateToken(), 
+                    token: token, 
                     Credentials:userExist
                 }
             )
@@ -109,6 +114,17 @@ const contactUs = async (req, res)=>{
 }
 
 
+const user = async (req, res)=>{
+    try {
+        
+        res.status(200).json({msg:req.data})
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
 
 
-module.exports = { home, register, login, contactUs }
+
+
+module.exports = { home, register, login, contactUs, user }

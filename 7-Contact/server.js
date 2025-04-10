@@ -4,6 +4,16 @@ const router = require('./routes/auth-router')
 const app = express()
 const connectdb = require('./utils/db')
 const errorMiddleware = require('./middlewares/error-middleware')
+const cors = require('cors')
+
+const corsOptions = {
+    origin: "http://localhost:5173",
+    methods: "GET, POST, PUT, PATCH, DELETE, HEAD",
+    credentials: true
+}
+
+app.use(cors(corsOptions))
+
 
 app.use(express.json())
 
@@ -13,7 +23,7 @@ app.get(('/'),(req, res)=>{
     res.status(200).send("Helcome to my website")
 })
 
-
+ 
 // app.get(('/register'),(req, res)=>{
 //     res.status(200).send("Helcome to my website")
 // })
@@ -26,4 +36,5 @@ connectdb().then(()=>{
         console.log(`Server is Listening on 3000`)
     })
 })
+
 

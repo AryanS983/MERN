@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthCreate } from "../store/auth";
 
 function Login() {
   const [User, setUser] = useState({
@@ -16,6 +17,7 @@ function Login() {
     });
   };
 
+  const {storeJWT} = AuthCreate()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -23,6 +25,7 @@ function Login() {
     try {
       const response = await fetch("http://localhost:3000/api/auth/login",{
         method:"POST",
+        credentials:"include",
         headers:{
           "Content-Type":"application/json"
         },
@@ -35,6 +38,7 @@ function Login() {
           password: "",
         })
         const data = await response.json()
+        storeJWT(data.token)
         console.log(data);
         navigate("/")
       }
@@ -55,7 +59,7 @@ function Login() {
                   src="/images/register.png"
                   alt="a nurse with a cute look"
                   width="400"
-                  height="500"
+                  height="400"
                 />
               </div>
               {/* our main registration code  */}

@@ -38,7 +38,7 @@ UserSchema.methods.generateToken = async function(){
             },
             process.env.JWT_SECRET_KEY,             //This is signature and could be anything
             {
-                expiresIn: "30d"                    //Expiration
+                expiresIn: "1h"                    //Expiration
             }
         )
     } catch (error) {

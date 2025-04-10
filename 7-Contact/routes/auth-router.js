@@ -8,6 +8,7 @@ const signupSchema = require('../validators/auth-validator')
 //Instead of importing every function individually we can use an object variable for it like this.
 const authcontrollers = require("../controllers/auth-controller")
 const contactSchema = require('../validators/contact-validator')
+const authMiddleware = require('../middlewares/auth-middleware')
 
 // router.get(('/'),(req, res)=>{
 //     res.status(200).send("HElllo and welcome to auth section")
@@ -21,5 +22,7 @@ router.route('/register').post( validatesignup(signupSchema), authcontrollers.re
 router.route('/login').post(authcontrollers.login)      // Here validate(signupSchema) is a middleware
 
 router.route('/contactUs').post(validatecontacts(contactSchema), authcontrollers.contactUs)
+
+router.route('/user').get(authMiddleware, authcontrollers.user)
 
 module.exports = router
