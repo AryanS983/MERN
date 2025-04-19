@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { AuthCreate } from "../store/auth"
+
 
 export const Contact = () => {
   const [contact, setContact] = useState({
@@ -6,6 +8,19 @@ export const Contact = () => {
     email: "",
     message: "",
   });
+
+  const [info, setInfo] = useState(true)
+  const {user} = AuthCreate()
+
+  if(user && info){
+    setContact({
+      username: user.username,
+      email: user.email,
+      message:""
+    })
+    setInfo(false)
+  }
+
 
   // lets tackle our handleInput
   const handleInput = (e) => {
@@ -19,9 +34,28 @@ export const Contact = () => {
   };
 
   // handle fomr getFormSubmissionInfo
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/contact", {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(contact)
+      })
+      console.log(response);
+      if(response.ok){
+        data = await response.json()
+        setContact({
+          ...contact,
+          messgae:""
+        })
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
     console.log(contact);
   };
 
@@ -99,7 +133,7 @@ export const Contact = () => {
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d460.54868142141225!2d88.37507119663807!3d22.564532934632304!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a027658a403d021%3A0xa1447aeb25d9b067!2sShibtala%20Ln%2C%20Seal%20Lane%2C%20Tangra%2C%20Kolkata%2C%20West%20Bengal%20700015!5e0!3m2!1sen!2sin!4v1744040243783!5m2!1sen!2sin"
             width="100%"
             height="450"
-            allowfullscreen
+            allowFullScreen
             loading="lazy"
           ></iframe>
         </section>

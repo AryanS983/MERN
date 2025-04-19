@@ -32,7 +32,7 @@ const register = async (req, res)=>{
             // we have to mention it explicitly like {usename:user, email: myemail......}
             // In this example hashpassword is variable name is not the same as the field name password so it is explicitly mentioned in line 27
             
-            
+             
 
             res.status(200).json(
                 {
@@ -75,7 +75,7 @@ const login = async (req, res)=>{
                 }
             )
         }else{
-            res.status(400).json({msg:"fuck yooooooo"})
+            res.status(400).json({msg:"fuck yooooooo wrong password"})
         }
 
         console.log({message: req.body}); 
@@ -95,7 +95,7 @@ const contactUs = async (req, res)=>{
             await userExists.save()
             res.status(200).json({"msg":"User exits -> message saved"});
         }else{
-            const newUser = await contact.create({ username, email, message: [message] })
+            const newUser = await contact.create({ username, email, message: [message] }) 
 
             res.status(200).json(
                 {
@@ -117,7 +117,7 @@ const contactUs = async (req, res)=>{
 const user = async (req, res)=>{
     try {
         
-        res.status(200).json({msg:req.data})
+        res.status(200).json(req.data)
     } catch (error) {
         console.log(error);
         
@@ -125,6 +125,6 @@ const user = async (req, res)=>{
 }
 
 
-
+ 
 
 module.exports = { home, register, login, contactUs, user }

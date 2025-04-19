@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthCreate } from "../store/auth";
+import { toast } from "react-toastify";
 
 function Login() {
   const [User, setUser] = useState({
@@ -32,15 +33,18 @@ function Login() {
         body: JSON.stringify(User)
       })
       console.log(response);
+      const data = await response.json()
       if(response.ok){
         setUser({
           email: "",
           password: "",
         })
-        const data = await response.json()
         storeJWT(data.token)
         console.log(data);
+        toast.success("Login Successful")
         navigate("/")
+      }else if (response.status == 400){
+        toast.error(data.extradetails ? data.extradetails : data.msg)   // reference auth-controller.js
       }
       
     } catch (error) {

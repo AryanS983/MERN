@@ -1,15 +1,19 @@
 import { NavLink } from "react-router-dom";
 // import { Analytics } from "../components/Analytics";
+import {AuthCreate} from "../store/auth"
+import { useEffect } from "react";
+import { useState } from "react";
 
 export const About = () => {
+  const {user, isLoggedin} = AuthCreate()
+
   return (
     <>
       <main>
         <section className="section-hero">
           <div className="container grid grid-two-cols">
             <div className="hero-content">
-              {/* <p>We care to cure your Health</p> */}
-
+              <p>Hii {isLoggedin? user.username : ( <>Person</> )}</p>
               <h1>Why Choose Us? </h1>
               <p>
                 Expertise: Our team consists of experienced IT professionals who

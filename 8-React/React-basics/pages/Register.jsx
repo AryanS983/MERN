@@ -43,6 +43,8 @@ function Register() {
         body: JSON.stringify(User)
       })
       const data = await response.json()
+      console.log(response);
+      console.log(data);
       if(response.ok){
         setUser({
           username: "",
@@ -51,9 +53,11 @@ function Register() {
           password: "",
         })
         navigate("/login")
+      }else if (response.status == 400){
+        alert(data.extradetails ? data.extradetails : data.msg)   // reference auth-controller.js
       }
 
-      console.log(data);
+      
     } catch (error) {
       console.log(error);
     }

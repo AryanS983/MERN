@@ -4,7 +4,7 @@ import About from '../pages/About'
 import Register from '../pages/Register'
 import Contact from '../pages/Contact'
 import Login from '../pages/Login'
-import Logout from '../pages/logout'
+import Logout from '../pages/Logout'
 import Services from '../pages/Services'
 import Error from '../pages/Error'
 
