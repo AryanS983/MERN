@@ -1,6 +1,7 @@
 const User = require('../models/user-model')
 const contact = require('../models/contact-model')
 const bcrypt = require('bcryptjs')
+const USER = require('../models/user-model')
 
 
 
@@ -25,8 +26,8 @@ const register = async (req, res)=>{
             const saltround = 10        // More the salt more complex the excryption
             const hashpassword = await bcrypt.hash(password,saltround)
 
-            const newUser = await User.create({ username, phone, email, password:hashpassword })
-            //newUser is the instance/object of the docment created using the User class
+            const N = await User.create({ username, phone, email, password:hashpassword })
+            //N is the instance/object of the docment created using the User class
             // if the names of the variables are same as that of the names in the schema then pass, In this case thats true
             // Then we can simply weite the field names once like {username, email, .....}
             // we have to mention it explicitly like {usename:user, email: myemail......}
@@ -37,9 +38,9 @@ const register = async (req, res)=>{
             res.status(200).json(
                 {
                     msg:"user data saved",
-                    // token: await newUser.generateToken(),
-                    userId: newUser._id.toString(),
-                    userdata: newUser
+                    // token: await N.generateToken(),
+                    userId: N._id.toString(),
+                    userdata: N
                 }
             )
         }
@@ -88,30 +89,34 @@ const login = async (req, res)=>{
 const contactUs = async (req, res)=>{
     try {
         const { username, email, message } = req.body
-        const userExists = await contact.findOne({email:email})        // Whenever we use any db/crud operation we use await 
+        const userExists = await USER.findOne({email:email})        // Whenever we use any db/crud operation we use await 
 
+        // if(userExists){
+        //     userExists.message.push(message)
+        //     await userExists.save()
+        //     res.status(200).json({"msg":"User exits -> message saved"});
+        // }else{
+        //     const newContact = await contact.create({ username, email, message: [message] }) 
         if(userExists){
-            userExists.message.push(message)
-            await userExists.save()
-            res.status(200).json({"msg":"User exits -> message saved"});
-        }else{
-            const newUser = await contact.create({ username, email, message: [message] }) 
+            await contact.create({ username, email, message: message })
 
             res.status(200).json(
                 {
                     msg:"user data saved",
-                    userId: newUser._id.toString(),
-                    userdata: newUser
                 }
             )
-        }
-        
-        console.log({message: req.body});              
+            console.log({message: req.body});
+        }else{
+            res.status(200).json({msg: "Register to send msg"})
+        }              
               
     } catch (error) {
         console.log(error);
+        res.status(500).json({msg: "Server Chud gaya"})
     }
 }
+
+
 
 
 const user = async (req, res)=>{

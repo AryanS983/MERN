@@ -14,11 +14,11 @@ const authMiddleware = async (req, res, next)=>{
         console.log(userData);
         
         req.data = userData
-        req.userID = userData._id.toString()
+        req.userID = userData._id
         next()
     } catch (error) {
         console.log(error);
-        
+        res.status(403).json({msg:"Jwt expired"})
     }
 }
 

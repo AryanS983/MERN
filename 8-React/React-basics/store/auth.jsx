@@ -8,10 +8,14 @@ export const AuthProvider = ({children})=>{                 //After creation the
     const [token, setToken] = useState(localStorage.getItem('token'))
     const [service, setService] = useState("")
 
+    const API = import.meta.env.VITE_API_URL
+
     const storeJWT = (token)=>{
         setToken(token)
         return localStorage.setItem("token", token)
     }
+
+    const authToken = `Bearer ${token}`
 
     //handling logout
     const isLoggedin = !!token
@@ -22,7 +26,7 @@ export const AuthProvider = ({children})=>{                 //After creation the
     }
 
     const UserAuthentication = async ()=>{
-        const response = await fetch("http://localhost:3000/api/auth/user",{
+        const response = await fetch(API+"api/auth/user",{
             method: "GET",
             headers:{
                 "Authorization": `Bearer ${token}`
@@ -36,7 +40,7 @@ export const AuthProvider = ({children})=>{                 //After creation the
     }
 
     const getServices = async()=>{
-        const response = await fetch("http://localhost:3000/api/doc/services",{
+        const response = await fetch(API+"api/doc/services",{
             method: "GET",
         })
         if(response.ok){
@@ -54,7 +58,7 @@ export const AuthProvider = ({children})=>{                 //After creation the
     }, [])
  
 
-    return <AuthContext value= {{ isLoggedin, storeJWT, logoutUser, user, service}}>
+    return <AuthContext value= {{ isLoggedin, storeJWT, logoutUser, user, service , authToken, API }}>
         {children}
     </AuthContext>
 }

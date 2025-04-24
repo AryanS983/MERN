@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AuthCreate } from "../store/auth"
+import { toast } from "react-toastify";
 
 
 export const Contact = () => {
@@ -9,6 +10,7 @@ export const Contact = () => {
     message: "",
   });
 
+  const {API} = AuthCreate()
   const [info, setInfo] = useState(true)
   const {user} = AuthCreate()
 
@@ -37,29 +39,32 @@ export const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/api/auth/contact", {
+      if (!contact.username || !contact.email || !contact.message) {
+        toast.error("All fields are required!");
+        return;
+      }
+      const response = await fetch(API+"api/auth/contact", {
         method:"POST",
         headers:{
           "Content-Type":"application/json"
         },
         body: JSON.stringify(contact)
       })
-      console.log(response);
+      const data = await response.json()
+      
       if(response.ok){
-        data = await response.json()
         setContact({
           ...contact,
-          messgae:""
+          message:""
         })
+        toast.success(data.msg)
       }
       
     } catch (error) {
       console.log(error);
     }
-    console.log(contact);
+    
   };
-
-  //  Help me reach 1 Million subs 👉 https://youtube.com/thapatechnical
 
   return (
     <>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom"
+import { AuthCreate } from "../store/auth";
 
 function Register() {
   const [User, setUser] = useState({
@@ -8,7 +9,7 @@ function Register() {
     email: "",
     password: "",
   });
-
+  const {API} = AuthCreate()
   const navigate = useNavigate()
 //   Task	                 Code
 // Object → JSON	    JSON.stringify(object)
@@ -35,7 +36,7 @@ function Register() {
     e.preventDefault()
     console.log(User);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register",{
+      const response = await fetch(API+"api/auth/register",{
         method:"POST",
         headers:{
           "Content-Type":"application/json"

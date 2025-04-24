@@ -6,6 +6,7 @@ const connectdb = require('./utils/db')
 const errorMiddleware = require('./middlewares/error-middleware')
 const cors = require('cors')
 const Servicerouter = require('./routes/service-router')
+const adminrouter = require('./routes/admin-router')
 
 const corsOptions = {
     origin: "http://localhost:5173",
@@ -20,6 +21,8 @@ app.use(express.json())
 
 app.use(('/api/auth'),router)
 app.use(('/api/doc'), Servicerouter)
+app.use(('/api/admin'), adminrouter)
+
 
 app.get(('/'),(req, res)=>{
     res.status(200).send("Helcome to my website")
